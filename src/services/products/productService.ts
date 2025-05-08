@@ -1,6 +1,6 @@
 import  http  from '../baseRequest';
 import { Product, SearchParams } from '../../types/productType';
-import { ApiResponse, SearchParameters, ProductApiResponse } from '../../types/apiResponse';      
+import { ApiResponse, SearchParameters, ProductApiResponse, SingleProductResponse } from '../../types/apiResponse';      
 
 // Product Service
 export const productService = {
@@ -16,10 +16,10 @@ export const productService = {
   },
 
   // Get product by ID
-  async getProductById(id: string): Promise<Product> {
+  async getProductById(id: string): Promise<SingleProductResponse> {
     try {
       const response = await http.get(`/items/${id}`);
-      return response.data as Product;
+      return response.data as SingleProductResponse;
     } catch (error) {
       console.error(`Error getting product with id ${id}:`, error);
       throw error;

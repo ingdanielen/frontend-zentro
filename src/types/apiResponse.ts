@@ -49,3 +49,9 @@ export interface SearchParameters {
     categories?: string[];
     brands?: string[];
 }
+
+export interface SingleProductResponse {
+  success: boolean;
+  message: string;
+  data: Product;
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Product } from '@/types/productType';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import Link from 'next/link';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
@@ -28,24 +29,26 @@ const getStars = (rating: number) => {
 
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   return (
-    <div className="rounded-2xl p-6 md:p-5 w-[260px] flex-shrink-0 flex flex-col items-start transition-shadow duration-200 group:hover:scale-105">
-      <div className="w-full bg-[#f6f4f4] rounded-2xl py-4 px-5 flex justify-center items-center mb-5">
-        <img
-          src={product.images}
-          alt={product.name}
-          className="w-40 h-40 object-contain rounded-lg bg-white"
-        />
+    <Link href={`/catalogo/${product._id}`} className="block">
+      <div className="rounded-2xl p-6 md:p-5 w-[260px] flex-shrink-0 flex flex-col items-start transition-shadow duration-200 hover:bg-gray-50">
+        <div className="w-full bg-[#f6f4f4] rounded-2xl py-4 px-5 flex justify-center items-center mb-5">
+          <img
+            src={product.images}
+            alt={product.name}
+            className="w-40 h-40 object-contain rounded-lg bg-white"
+          />
+        </div>
+        <div className="text-base font-bold mb-2 text-gray-900">{product.name}</div>
+        <div className="flex items-center gap-2 mb-2">
+          <div className="flex gap-0.5">{getStars(product.rating)}</div>
+          <span className="text-sm text-gray-700">{product.rating.toFixed(1)}/5</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xl font-bold text-nightBlue">${product.price.toLocaleString('es-CO')}</span>
+          <span className="text-sm text-gray-700 line-through">${(product.price * 1.1).toLocaleString('es-CO')}</span>
+        </div>
       </div>
-      <div className="text-base font-bold mb-2 text-gray-900">{product.name}</div>
-      <div className="flex items-center gap-2 mb-2">
-        <div className="flex gap-0.5">{getStars(product.rating)}</div>
-        <span className="text-sm text-gray-700">{product.rating.toFixed(1)}/5</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <span className="text-xl font-bold text-nightBlue">${product.price.toLocaleString('es-CO')}</span>
-        <span className="text-sm text-gray-700 line-through">${(product.price * 1.1).toLocaleString('es-CO')}</span>
-      </div>
-    </div>
+    </Link>
   );
 };
 

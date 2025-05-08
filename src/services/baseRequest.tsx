@@ -9,16 +9,20 @@ const baseConfig: AxiosRequestConfig = {
   },
 };
 
+console.log('API Base URL:', process.env.NEXT_PUBLIC_API_URL);
+
 // Create axios instance
 const axiosInstance: AxiosInstance = axios.create(baseConfig);
 
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    // You can add auth token here
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    // Solo en cliente: agrega token si existe
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   },

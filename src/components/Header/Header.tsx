@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Categorías", dropdown: true },
-  { label: "En venta", href: "/en-venta" },
+  { label: "En venta", href: "/catalogo" },
   { label: "Ofertas", href: "/ofertas" },
   { label: "Novedades", href: "/novedades" },
 ];
@@ -29,8 +29,7 @@ export const Header: React.FC = () => {
         <button
           className="absolute right-4 top-1/2 -translate-y-1/2 text-white"
           aria-label="Close banner"
-        >
-        </button>
+        ></button>
       </div>
 
       {/* Main Header */}
@@ -41,7 +40,11 @@ export const Header: React.FC = () => {
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Open menu"
         >
-          {mobileMenuOpen ? <X className="text-nightBlue"    size={28} /> : <Menu className="text-nightBlue" size={28} />}
+          {mobileMenuOpen ? (
+            <X className="text-nightBlue" size={28} />
+          ) : (
+            <Menu className="text-nightBlue" size={28} />
+          )}
         </button>
 
         {/* Logo */}
@@ -56,12 +59,12 @@ export const Header: React.FC = () => {
           {navLinks.map((link) => (
             <div key={link.label} className="relative group">
               {link.href ? (
-                <Link 
+                <Link
                   href={link.href}
                   className={`flex items-center gap-1 text-base text-gray-800 hover:text-nightBlue focus:outline-none transition-all duration-200 relative ${
-                    pathname === link.href 
-                      ? 'text-nightBlue font-medium after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-nightBlue after:rounded-full' 
-                      : 'hover:after:absolute hover:after:bottom-[-8px] hover:after:left-0 hover:after:w-full hover:after:h-0.5 hover:after:bg-nightBlue/50 hover:after:rounded-full'
+                    pathname === link.href
+                      ? "text-nightBlue font-medium after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-nightBlue after:rounded-full"
+                      : "hover:after:absolute hover:after:bottom-[-8px] hover:after:left-0 hover:after:w-full hover:after:h-0.5 hover:after:bg-nightBlue/50 hover:after:rounded-full"
                   }`}
                 >
                   {link.label}
@@ -74,13 +77,15 @@ export const Header: React.FC = () => {
               )}
               {/* Dropdown example (not functional) */}
               {link.dropdown && (
-                <div className="absolute text-nightBlue left-0 mt-2 bg-white shadow-lg rounded-md min-w-[120px] z-10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transform origin-top scale-95 group-hover:scale-100 transition-all duration-200 ease-out">
-                  <Link href="#" className="block px-4 py-2 hover:bg-gray-100 transition-colors duration-200">
-                    Category 1
-                  </Link>
-                  <Link href="#" className="block px-4 py-2 hover:bg-gray-100 transition-colors duration-200">
-                    Category 2
-                  </Link>
+                <div className="fixed left-0 right-0 mt-4 bg-white border-t border-gray-100 shadow-lg z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-out">
+                  <div className="max-w-7xl mx-auto px-4 py-6">
+                    <div className="grid grid-cols-4 gap-8">
+                      <Link href="categorias/electronica" className="text-gray-600 hover:text-nightBlue">Electrónica</Link>
+                      <Link href="categorias/hogar" className="text-gray-600 hover:text-nightBlue">Hogar</Link>
+                      <Link href="categorias/moda" className="text-gray-600 hover:text-nightBlue">Moda</Link>
+                      <Link href="categorias/deportes" className="text-gray-600 hover:text-nightBlue">Deportes</Link>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -101,7 +106,6 @@ export const Header: React.FC = () => {
 
         {/* Icons (right for mobile and desktop) */}
         <div className="flex items-center gap-4 md:gap-6 ml-auto md:ml-0 z-20">
-
           <Link href="/cart">
             <ShoppingCart className="cursor-pointer text-gray-800 w-7 h-7 md:w-8 md:h-8 hover:text-nightBlue hover:border hover:border-nightBlue hover:bg-gray-200 rounded-full p-1 transition-all duration-300" />
           </Link>
@@ -112,10 +116,19 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Mobile Dropdown/Sidebar */}
-      <div className={`fixed inset-0 z-50 transition-all duration-300 ${mobileMenuOpen ? 'bg-black bg-opacity-30' : 'bg-black bg-opacity-0 pointer-events-none'} flex`}>
-        <div className={`w-3/4 max-w-xs bg-white shadow-lg px-6 py-6 flex flex-col gap-4 h-full transform transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div
+        className={`fixed inset-0 z-50 transition-all duration-300 ${
+          mobileMenuOpen
+            ? "bg-black bg-opacity-30"
+            : "bg-black bg-opacity-0 pointer-events-none"
+        } flex`}
+      >
+        <div
+          className={`w-3/4 max-w-xs bg-white shadow-lg px-6 py-6 flex flex-col gap-4 h-full transform transition-transform duration-300 ease-in-out ${
+            mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
           <div className="flex justify-between items-center mb-4">
-
             <span className="font-extrabold font-integral text-xl text-nightBlue">
               ZENTRO.CO
             </span>
@@ -130,10 +143,10 @@ export const Header: React.FC = () => {
             <Link
               key={link.label}
               href={link.href || "#"}
-              className={`text-left text-base font-medium py- border-b border-gray-100 flex items-center gap-2 hover:text-nightBlue transition-all duration-200 relative ${
-                pathname === link.href 
-                  ? 'text-nightBlue font-medium after:absolute after:left-0 after:bottom-0 after:w-1 after:h-full after:bg-nightBlue' 
-                  : 'text-black hover:after:absolute hover:after:left-0 hover:after:bottom-0 hover:after:w-1 hover:after:h-full hover:after:bg-nightBlue/50'
+              className={`text-left text-base font-medium py-1 border-b border-gray-100 flex items-center gap-2 hover:text-nightBlue transition-all duration-200 relative ${
+                pathname === link.href
+                  ? "text-nightBlue font-medium after:absolute after:left-0 after:bottom-0 after:w-1 after:h-full after:bg-nightBlue"
+                  : "text-black hover:after:absolute hover:after:left-0 hover:after:bottom-0 hover:after:w-1 hover:after:h-full hover:after:bg-nightBlue/50"
               }`}
             >
               {link.label}
