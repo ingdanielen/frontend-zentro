@@ -17,7 +17,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <img
             src={product.images}
             alt={product.name}
-            className="w-40 h-40 object-contain rounded-lg bg-white transition-transform duration-300 group-hover:scale-105"
+            className="w-40 h-40 object-contain rounded-lg transition-transform duration-300 group-hover:scale-105"
           />
         </div>
         <div className="text-base font-bold mb-2 text-gray-900 line-clamp-2">{product.name}</div>

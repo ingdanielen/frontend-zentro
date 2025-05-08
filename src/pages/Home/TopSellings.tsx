@@ -88,7 +88,7 @@ const NewArrivals: React.FC = () => {
         <ProductMaping products={products} />
       </div>
       <Link
-        href="/products"
+        href="/catalogo"
         className="flex justify-center items-center px-8 py-4 rounded-full border border-gray-200 bg-white text-base font-medium text-gray-900 hover:bg-[#f6f4f4] hover:shadow transition-all w-full max-w-xs"
       >
         Ver todos

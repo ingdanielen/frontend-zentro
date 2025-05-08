@@ -30,12 +30,12 @@ const getStars = (rating: number) => {
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   return (
     <Link href={`/catalogo/${product._id}`} className="block">
-      <div className="rounded-2xl p-6 md:p-5 w-[260px] flex-shrink-0 flex flex-col items-start transition-shadow duration-200 hover:bg-gray-50">
+      <div className="rounded-2xl p-6 md:p-5 w-[260px] flex-shrink-0 flex flex-col items-start transition-all duration-300 hover:bg-gray-50  hover:scale-[1.02]">
         <div className="w-full bg-[#f6f4f4] rounded-2xl py-4 px-5 flex justify-center items-center mb-5">
           <img
             src={product.images}
             alt={product.name}
-            className="w-40 h-40 object-contain rounded-lg bg-white"
+            className="w-40 h-40 object-contain rounded-lg "
           />
         </div>
         <div className="text-base font-bold mb-2 text-gray-900">{product.name}</div>
@@ -59,7 +59,7 @@ const ProductMaping: React.FC<ProductMapingProps> = ({ products }) => {
       <div className="md:hidden">
         <Swiper
           spaceBetween={24}
-          slidesPerView={1.6}
+          slidesPerView={1.2}
           centeredSlides={true}
           style={{ paddingLeft: 32, paddingRight: 32 }}
           pagination={{ clickable: true }}

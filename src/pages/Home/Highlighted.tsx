@@ -5,24 +5,25 @@ import Link from "next/link";
 const dressStyles = [
   {
     label: "Tecnología",
-    img: "/images/technology.png",
+    img: "/images/technology-banner.jpg",
     alt: "Ropa tecnología",
   },
   {
-    label: "Formal",
-    img: "/images/technology.png",
+    label: "Moda",
+    img: "/images/moda.jpg",
     alt: "Ropa formal",
   },
   {
-    label: "Party",
-    img: "/images/technology.png",
-    alt: "Ropa de fiesta",
+    label: "Hogar",
+    img: "/images/insumo-hogar.jpg",
+    alt: "Hogar",
   },
   {
-    label: "Gym",
-    img: "/images/technology.png",
-    alt: "Ropa de gimnasio",
+    label: "Deportes",
+    img: "/images/baner-deportes.jpg",
+    alt: "Ropa de fiesta",
   },
+
 ];
 
 export default function Highlighted() {
@@ -35,7 +36,7 @@ export default function Highlighted() {
         {/* Desktop grid */}
         <div className="hidden md:grid grid-cols-3 grid-rows-2 gap-6">
           {/* Fila 1 */}
-          <Link href={`/products/${dressStyles[0].label.toLowerCase()}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow hover:shadow-lg transition-all cursor-pointer col-span-2">
+          <Link href={`/products/${dressStyles[0].label.toLowerCase()}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow  transition-all cursor-pointer col-span-2">
             <Image
               src={dressStyles[0].img}
               alt={dressStyles[0].alt}
@@ -47,7 +48,7 @@ export default function Highlighted() {
               {dressStyles[0].label}
             </span>
           </Link>
-          <Link href={`/products/${dressStyles[1].label.toLowerCase()}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow hover:shadow-lg transition-all cursor-pointer">
+          <Link href={`/products/${dressStyles[1].label.toLowerCase()}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow  transition-all cursor-pointer">
             <Image
               src={dressStyles[1].img}
               alt={dressStyles[1].alt}
@@ -55,12 +56,12 @@ export default function Highlighted() {
               className="object-cover object-center w-full h-full transition-transform duration-300 group-hover:scale-105"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
-            <span className="absolute top-6 right-6 text-black text-2xl font-bold drop-shadow-md z-10">
+            <span className="absolute top-6 left-6 text-black text-2xl font-bold drop-shadow-md z-10">
               {dressStyles[1].label}
             </span>
           </Link>
           {/* Fila 2 */}
-          <Link href={`/products/${dressStyles[2].label.toLowerCase()}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow hover:shadow-lg transition-all cursor-pointer">
+          <Link href={`/products/${dressStyles[2].label.toLowerCase()}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow  transition-all cursor-pointer">
             <Image
               src={dressStyles[2].img}
               alt={dressStyles[2].alt}
@@ -72,15 +73,15 @@ export default function Highlighted() {
               {dressStyles[2].label}
             </span>
           </Link>
-          <Link href={`/products/${dressStyles[3].label.toLowerCase()}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow hover:shadow-lg transition-all cursor-pointer col-span-2">
+          <Link href={`/products/${dressStyles[3].label.toLowerCase()}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow  transition-all cursor-pointer col-span-2">
             <Image
               src={dressStyles[3].img}
               alt={dressStyles[3].alt}
               fill
-              className="object-cover object-center w-full h-full transition-transform duration-300 group-hover:scale-105"
+              className="object-cover object-top w-full h-full transition-transform duration-300 group-hover:scale-105"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
-            <span className="absolute top-6 right-6 text-black text-2xl font-bold drop-shadow-md z-10">
+            <span className="absolute top-6 left-6 text-black text-2xl font-bold drop-shadow-md z-10">
               {dressStyles[3].label}
             </span>
           </Link>
@@ -91,7 +92,7 @@ export default function Highlighted() {
             <Link
               key={style.label}
               href={`/products/${style.label.toLowerCase()}`}
-              className="relative rounded-2xl overflow-hidden bg-white min-h-[120px] shadow group hover:shadow-md transition-all cursor-pointer"
+              className="relative rounded-2xl overflow-hidden bg-white min-h-[120px] shadow group  transition-all cursor-pointer"
             >
               <Image
                 src={style.img}
