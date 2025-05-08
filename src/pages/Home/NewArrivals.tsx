@@ -1,48 +1,36 @@
 "use client";
+
+import dynamic from 'next/dynamic';
 import ProductMaping from "@/components/UX-UI/ProductMaping";
 import { productService } from "@/services/products/productService";
 import { Product } from "@/types/productType";
-import { useToast } from "@/context/ToastContext";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 const NewArrivals: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const { addToast } = useToast();
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       const response = await productService.searchProducts();
       if (response?.data?.items) {
         setProducts(response.data.items);
       } else {
-        console.error("Invalid response format:", {
-          response,
-          expectedFormat: {
-            data: {
-              items: "Array of products",
-              total: "Total count",
-              page: "Current page",
-              limit: "Items per page",
-              totalPages: "Total pages"
-            }
-          }
-        });
-        addToast("Error al cargar los productos: Formato de respuesta inválido", "error");
+        console.error("Invalid response format:", response);
         setProducts([]);
       }
     } catch (error) {
       console.error("Error fetching products:", error);
-      addToast(`Error al cargar los productos: ${error instanceof Error ? error.message : 'Error desconocido'}`, "error");
       setProducts([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
   useEffect(() => {
     fetchProducts();
-  }, [addToast]);
+  }, [fetchProducts]);
 
   console.log(products);
 
@@ -75,4 +63,6 @@ const NewArrivals: React.FC = () => {
   );
 };
 
-export default NewArrivals;
+export default dynamic(() => Promise.resolve(NewArrivals), {
+  ssr: false
+});

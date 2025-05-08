@@ -1,6 +1,6 @@
 import  http  from '../baseRequest';
 import { Product, SearchParams } from '../../types/productType';
-import { ApiResponse, PaginatedResponse, SearchParameters, ProductApiResponse } from '../../types/apiResponse';      
+import { ApiResponse, SearchParameters, ProductApiResponse } from '../../types/apiResponse';      
 
 // Product Service
 export const productService = {
@@ -60,10 +60,10 @@ export const productService = {
   },
 
   // Get all system parameters
-  async getAllParameters(): Promise<ApiResponse<any>> {
+  async getAllParameters(): Promise<ApiResponse<Record<string, unknown>>> {
     try {
       const response = await http.get(`/parameters`);
-      return response.data as ApiResponse<any>;
+      return response.data as ApiResponse<Record<string, unknown>>;
     } catch (error) {
       console.error('Error getting all parameters:', error);
       throw error;
@@ -71,10 +71,10 @@ export const productService = {
   },
 
   // Update parameter count
-  async updateParameterCount(updateData: any): Promise<ApiResponse<any>> {
+  async updateParameterCount(updateData: Record<string, unknown>): Promise<ApiResponse<Record<string, unknown>>> {
     try {
       const response = await http.post(`/parameters/update`, updateData);
-      return response.data as ApiResponse<any>;
+      return response.data as ApiResponse<Record<string, unknown>>;
     } catch (error) {
       console.error('Error updating parameter count:', error);
       throw error;
