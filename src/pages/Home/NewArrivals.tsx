@@ -1,91 +1,68 @@
-'use client'
-import React from 'react';
-import { Product } from '@/types/productType';
-import Link from 'next/link';
-import ProductMaping from '@/components/UX-UI/ProductMaping';   
-
-// Dummy data para ejemplo visual
-const products: Product[] = [
-  {
-    _id: '1',
-    active: true,
-    name: 'T-shirt with Tape Details',
-    stock: 10,
-    width: 0,
-    height: 0,
-    weight: 0,
-    color: 'Black',
-    description: '',
-    price: 780000,
-    category: 'Clothes',
-    brand: 'BrandA',
-    images: 'https://i.imgur.com/1.png',
-    rating: 4.5,
-    createdAt: '',
-    __v: 0,
-  },
-  {
-    _id: '2',
-    active: true,
-    name: 'Skinny Fit Jeans',
-    stock: 10,
-    width: 0,
-    height: 0,
-    weight: 0,
-    color: 'Blue',
-    description: '',
-    price: 250000,
-    category: 'Clothes',
-    brand: 'BrandB',
-    images: 'https://i.imgur.com/2.png',
-    rating: 3.5,
-    createdAt: '',
-    __v: 0,
-  },
-  {
-    _id: '3',
-    active: true,
-    name: 'Checkered Shirt',
-    stock: 10,
-    width: 0,
-    height: 0,
-    weight: 0,
-    color: 'Red',
-    description: '',
-    price: 920000,
-    category: 'Clothes',
-    brand: 'BrandC',
-    images: 'https://i.imgur.com/3.png',
-    rating: 4.5,
-    createdAt: '',
-    __v: 0,
-  },
-  {
-    _id: '4',
-    active: true,
-    name: 'Sleeve Striped T-shirt',
-    stock: 10,
-    width: 0,
-    height: 0,
-    weight: 0,
-    color: 'Orange',
-    description: '',
-    price: 130000,
-    category: 'Clothes',
-    brand: 'BrandD',
-    images: 'https://i.imgur.com/4.png',
-    rating: 4.5,
-    createdAt: '',
-    __v: 0,
-  },
-];
+"use client";
+import ProductMaping from "@/components/UX-UI/ProductMaping";
+import { productService } from "@/services/products/productService";
+import { Product } from "@/types/productType";
+import { useToast } from "@/context/ToastContext";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
 
 const NewArrivals: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { addToast } = useToast();
+
+  const fetchProducts = async () => {
+    try {
+      const response = await productService.searchProducts();
+      if (response?.data?.items) {
+        setProducts(response.data.items);
+      } else {
+        console.error("Invalid response format:", {
+          response,
+          expectedFormat: {
+            data: {
+              items: "Array of products",
+              total: "Total count",
+              page: "Current page",
+              limit: "Items per page",
+              totalPages: "Total pages"
+            }
+          }
+        });
+        addToast("Error al cargar los productos: Formato de respuesta inválido", "error");
+        setProducts([]);
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      addToast(`Error al cargar los productos: ${error instanceof Error ? error.message : 'Error desconocido'}`, "error");
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchProducts();
+  }, [addToast]);
+
+  console.log(products);
+
   return (
-    <section className="w-full flex flex-col gap-10 items-center pb-20">
-      <h2 className="text-4xl md:text-5xl font-integral text-gray-800 font-extrabold tracking-wide text-center">NUEVOS PRODUCTOS</h2>
+    <section className="w-full flex flex-col gap-10 items-center">
+      <h2 className="text-4xl md:text-5xl font-integral text-gray-800 font-extrabold tracking-wide text-center">
+        NUEVOS PRODUCTOS
+      </h2>
       <div className="w-full max-w-7xl">
-        <ProductMaping products={products} />
+        {loading ? (
+          <div className="flex justify-center items-center min-h-[200px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-800"></div>
+          </div>
+        ) : products.length > 0 ? (
+          <ProductMaping products={products} />
+        ) : (
+          <div className="text-center text-gray-500">
+            No hay productos disponibles
+          </div>
+        )}
       </div>
       <Link
         href="/products"

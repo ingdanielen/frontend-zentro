@@ -1,16 +1,20 @@
 "use client";
 import React, { useState } from "react";
-import { Menu, X, ShoppingCart, User, Search, ArrowDown } from "lucide-react";
+import { Menu, X, ShoppingCart, User, Search, ChevronDown } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 const navLinks = [
+  { label: "Home", href: "/" },
   { label: "Categorías", dropdown: true },
-  { label: "En venta" },
-  { label: "Ofertas" },
-  { label: "Novedades" },
+  { label: "En venta", href: "/en-venta" },
+  { label: "Ofertas", href: "/ofertas" },
+  { label: "Novedades", href: "/novedades" },
 ];
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="w-full">
@@ -51,17 +55,30 @@ export const Header: React.FC = () => {
         <nav className="hidden md:flex gap-6 ml-8">
           {navLinks.map((link) => (
             <div key={link.label} className="relative group">
-              <button className="flex items-center gap-1 text-base text-gray-800 hover:text-nightBlue focus:outline-none">
-                {link.label}
-                {link.dropdown && <ArrowDown className="ml-1" size={16} />}
-              </button>
+              {link.href ? (
+                <Link 
+                  href={link.href}
+                  className={`flex items-center gap-1 text-base text-gray-800 hover:text-nightBlue focus:outline-none transition-all duration-200 relative ${
+                    pathname === link.href 
+                      ? 'text-nightBlue font-medium after:absolute after:bottom-[-8px] after:left-0 after:w-full after:h-0.5 after:bg-nightBlue after:rounded-full' 
+                      : 'hover:after:absolute hover:after:bottom-[-8px] hover:after:left-0 hover:after:w-full hover:after:h-0.5 hover:after:bg-nightBlue/50 hover:after:rounded-full'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <button className="flex items-center gap-1 text-base text-gray-800 hover:text-nightBlue focus:outline-none transition-all duration-200 relative hover:after:absolute hover:after:bottom-[-8px] hover:after:left-0 hover:after:w-full hover:after:h-0.5 hover:after:bg-nightBlue/50 hover:after:rounded-full">
+                  {link.label}
+                  {link.dropdown && <ChevronDown className="ml-1" size={16} />}
+                </button>
+              )}
               {/* Dropdown example (not functional) */}
               {link.dropdown && (
                 <div className="absolute text-nightBlue left-0 mt-2 bg-white shadow-lg rounded-md min-w-[120px] z-10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transform origin-top scale-95 group-hover:scale-100 transition-all duration-200 ease-out">
-                  <Link href="#" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link href="#" className="block px-4 py-2 hover:bg-gray-100 transition-colors duration-200">
                     Category 1
                   </Link>
-                  <Link href="#" className="block px-4 py-2 hover:bg-gray-100">
+                  <Link href="#" className="block px-4 py-2 hover:bg-gray-100 transition-colors duration-200">
                     Category 2
                   </Link>
                 </div>
@@ -110,12 +127,17 @@ export const Header: React.FC = () => {
             </button>
           </div>
           {navLinks.map((link) => (
-            <button
+            <Link
               key={link.label}
-              className="text-left text-base font-medium text-black py-2 border-b border-gray-100"
+              href={link.href || "#"}
+              className={`text-left text-base font-medium py- border-b border-gray-100 flex items-center gap-2 hover:text-nightBlue transition-all duration-200 relative ${
+                pathname === link.href 
+                  ? 'text-nightBlue font-medium after:absolute after:left-0 after:bottom-0 after:w-1 after:h-full after:bg-nightBlue' 
+                  : 'text-black hover:after:absolute hover:after:left-0 hover:after:bottom-0 hover:after:w-1 hover:after:h-full hover:after:bg-nightBlue/50'
+              }`}
             >
               {link.label}
-            </button>
+            </Link>
           ))}
           <div className="flex items-center w-full bg-gray-100 rounded-full px-4 py-2 mt-4">
             <Search className="text-gray-400 mr-2" size={20} />

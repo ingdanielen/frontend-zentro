@@ -21,24 +21,24 @@ export default function Hero() {
           </button>
           <div className="flex w-full justify-center md:justify-start gap-8 mt-4 md:mt-8">
             <div className="flex flex-col items-center">
-              <span className="font-integral text-2xl md:text-3xl font-extrabold text-[#171717]">
-                200+
+              <span className="font-integral text-2xl md:text-3xl font-extrabold text-nightBlue">
+                200
               </span>
               <span className="text-[#7D7D7D] text-sm md:text-base mt-1">
                 Marcas
               </span>
             </div>
             <div className="flex flex-col items-center">
-              <span className="font-integral text-2xl md:text-3xl font-extrabold text-[#171717]">
-                2,000+
+              <span className="font-integral text-2xl md:text-3xl font-extrabold text-nightBlue">
+                2,000
               </span>
               <span className="text-[#7D7D7D] text-sm md:text-base mt-1">
                 Productos únicos
               </span>
             </div>
             <div className="flex flex-col items-center">
-              <span className="font-integral text-2xl md:text-3xl font-extrabold text-[#171717]">
-                30,000+
+              <span className="font-integral text-2xl md:text-3xl font-extrabold text-nightBlue">
+                30,000
               </span>
               <span className="text-[#7D7D7D] text-sm md:text-base mt-1">
                 Calificaciones
@@ -47,7 +47,7 @@ export default function Hero() {
           </div>
         </div>
         {/* Imagen */}
-        <div className="relative w-[1600px] h-[664px] -mb-11 md:block hidden ">
+        <div className="relative w-[1600px] h-[600px] -mb-8 md:block hidden ">
           <Image
             src="/images/hero-image.png"
             alt="Hero principal"

@@ -47,13 +47,13 @@ const Footer = () => {
               <Link className="cursor-pointer" href="#" aria-label="Twitter">
                 <Twitter className="text-nightBlue" size={24} />
               </Link>
-              <Link className="cursor-pointer" href="#" aria-label="Facebook">
+              <Link className="cursor-pointer" href="https://www.facebook.com/daniel.es17/" aria-label="Facebook">
                 <Facebook className="text-nightBlue" size={24} />
               </Link>
-              <Link className="cursor-pointer" href="#" aria-label="Instagram">
+              <Link className="cursor-pointer" href="https://www.instagram.com/daniel.ricardopr/" aria-label="Instagram">
                 <Instagram className="text-nightBlue" size={24} />
               </Link>
-              <Link className="cursor-pointer" href="#" aria-label="Github">
+              <Link className="cursor-pointer" href="https://github.com/ingdanielen" aria-label="Github">
                 <Github className="text-nightBlue" size={24} />
               </Link>
             </div>
