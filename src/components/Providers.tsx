@@ -2,14 +2,13 @@
 
 import { Provider } from 'react-redux';
 import { store } from '@/store/store';
-import { ToastProvider } from '@/context/ToastContext';
+import { AuthInitializer } from './AuthInitializer';
 
-export function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
-      <ToastProvider>
-        {children}
-      </ToastProvider>
+      <AuthInitializer />
+      {children}
     </Provider>
   );
 } 

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const brands = ["VERSACE", "ZARA", "GUCCI", "PRADA", "Calvin Klein"];
+const brands = ["Apple", "ZARA", "Juan Valdez", "Prada", "Tesla"];
 
 export default function Hero() {
   return (

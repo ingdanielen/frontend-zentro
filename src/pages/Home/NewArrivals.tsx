@@ -3,17 +3,23 @@
 import dynamic from 'next/dynamic';
 import ProductMaping from "@/components/UX-UI/ProductMaping";
 import { productService } from "@/services/products/productService";
-import { Product } from "@/types/productType";
+import { Product, SearchParams } from "@/types/productType";
 import Link from "next/link";
 import React, { useEffect, useState, useCallback } from "react";
+import LoadingFade from "@/components/UX-UI/LoadingFade";
 
 const NewArrivals: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); 
+  const itemsPerPage = 4;
 
   const fetchProducts = useCallback(async () => {
     try {
-      const response = await productService.searchProducts();
+      const params: SearchParams = {
+        limit: itemsPerPage,
+        page: 1
+      };
+      const response = await productService.searchProducts(params);
       if (response?.data?.items) {
         setProducts(response.data.items);
       } else {
@@ -32,25 +38,21 @@ const NewArrivals: React.FC = () => {
     fetchProducts();
   }, [fetchProducts]);
 
-  console.log(products);
-
   return (
     <section className="w-full flex flex-col gap-10 items-center">
       <h2 className="text-4xl md:text-5xl font-integral text-gray-800 font-extrabold tracking-wide text-center">
         NUEVOS PRODUCTOS
       </h2>
       <div className="w-full max-w-7xl">
-        {loading ? (
-          <div className="flex justify-center items-center min-h-[200px]">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-800"></div>
-          </div>
-        ) : products.length > 0 ? (
-          <ProductMaping products={products} />
-        ) : (
-          <div className="text-center text-gray-500">
-            No hay productos disponibles
-          </div>
-        )}
+        <LoadingFade isLoading={loading}>
+          {products.length > 0 ? (
+            <ProductMaping products={products} />
+          ) : (
+            <div className="text-center text-gray-500">
+              No hay productos disponibles
+            </div>
+          )}
+        </LoadingFade>
       </div>
       <Link
         href="/catalogo"

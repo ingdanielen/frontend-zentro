@@ -1,5 +1,16 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
+interface ApiErrorResponse {
+  message: string;
+  status: number;
+  data: unknown;
+}
+
+interface ApiErrorData {
+  message?: string;
+  [key: string]: unknown;
+}
+
 // Define base configuration
 const baseConfig: AxiosRequestConfig = {
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -36,25 +47,31 @@ axiosInstance.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error: AxiosError) => {
-    // Handle different error status codes
+  (error: AxiosError<ApiErrorData>) => {
     if (error.response) {
-      switch (error.response.status) {
-        case 401:
-          // Handle unauthorized
-          break;
-        case 403:
-          // Handle forbidden
-          break;
-        case 404:
-          // Handle not found
-          break;
-        case 500:
-          // Handle server error
-          break;
-      }
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      const errorMessage = error.response.data?.message || error.message;
+      return Promise.reject({
+        message: errorMessage,
+        status: error.response.status,
+        data: error.response.data
+      } as ApiErrorResponse);
+    } else if (error.request) {
+      // The request was made but no response was received
+      return Promise.reject({
+        message: 'No se recibió respuesta del servidor',
+        status: 0,
+        data: null
+      } as ApiErrorResponse);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      return Promise.reject({
+        message: 'Error al configurar la petición',
+        status: 0,
+        data: null
+      } as ApiErrorResponse);
     }
-    return Promise.reject(error);
   }
 );
 
@@ -76,7 +93,12 @@ const http = {
         message: 'Success',
       };
     } catch (error) {
-      throw error;
+      const apiError = error as ApiErrorResponse;
+      throw {
+        message: apiError.message || 'Error en la petición GET',
+        status: apiError.status || 500,
+        data: apiError.data
+      } as ApiErrorResponse;
     }
   },
 
@@ -89,7 +111,12 @@ const http = {
         message: 'Success',
       };
     } catch (error) {
-      throw error;
+      const apiError = error as ApiErrorResponse;
+      throw {
+        message: apiError.message || 'Error en la petición POST',
+        status: apiError.status || 500,
+        data: apiError.data
+      } as ApiErrorResponse;
     }
   },
 
@@ -102,7 +129,12 @@ const http = {
         message: 'Success',
       };
     } catch (error) {
-      throw error;
+      const apiError = error as ApiErrorResponse;
+      throw {
+        message: apiError.message || 'Error en la petición PUT',
+        status: apiError.status || 500,
+        data: apiError.data
+      } as ApiErrorResponse;
     }
   },
 
@@ -115,7 +147,12 @@ const http = {
         message: 'Success',
       };
     } catch (error) {
-      throw error;
+      const apiError = error as ApiErrorResponse;
+      throw {
+        message: apiError.message || 'Error en la petición PATCH',
+        status: apiError.status || 500,
+        data: apiError.data
+      } as ApiErrorResponse;
     }
   },
 
@@ -128,7 +165,12 @@ const http = {
         message: 'Success',
       };
     } catch (error) {
-      throw error;
+      const apiError = error as ApiErrorResponse;
+      throw {
+        message: apiError.message || 'Error en la petición DELETE',
+        status: apiError.status || 500,
+        data: apiError.data
+      } as ApiErrorResponse;
     }
   },
 };

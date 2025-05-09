@@ -1,8 +1,17 @@
+"use client";
+
 import { Facebook, Github, Instagram, Twitter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Footer = () => {
+  const pathname = usePathname();
+
+  if (pathname === "/admin") {
+    return null;
+  }
+
   return (
     <footer className="bg-grayBg w-full relative pt-32 md:pt-36">
       {/* Banner superior sobresaliente */}

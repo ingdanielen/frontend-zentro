@@ -1,75 +1,130 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { loginService } from '@/services/loginService';
+import { LoginCredentials } from '@/types/authResponse';
+import { useAppDispatch } from '@/store/hooks';
+import { setCredentials } from '@/store/features/authSlice';
+import Input from '@/components/UX-UI/Input';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginView() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          if (user.role === 'admin') {
+            router.push('/admin');
+          } else {
+            router.push('/carrito');
+          }
+        } catch (e) {
+          console.error('Error parsing user from localStorage:', e);
+          router.push('/carrito');
+        }
+      } else {
+        router.push('/carrito');
+      }
+    }
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
     
     try {
-      // TODO: Implement login logic here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      router.push("/dashboard");
+      const credentials: LoginCredentials = { email, password };
+      const response = await loginService.login(credentials);
+      
+      if (response.success) {
+        localStorage.setItem('token', response.data.token);
+        dispatch(setCredentials(response.data));
+        if (response.data.user.role === 'admin') {
+          router.push("/admin");
+        } else {
+          router.push("/carrito");
+        }
+      } else {
+        setError(response.message);
+      }
     } catch (error) {
-      console.error("Login failed:", error);
+      const errorMessage = error instanceof Error ? error.message : "Error al iniciar sesión. Por favor, intente nuevamente.";
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="py-5 bg-gray-50 flex items-center justify-center ">
-      <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-lg">
+    <div className="py-5 flex items-center justify-center">
+      <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-md">
         <div className="text-center">
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-nightBlue mb-2">
-              Welcome Back
+              Bienvenido de nuevo
             </h2>
             <p className="text-gray-600 text-sm">
-              Sign in to continue your journey
+              Inicia sesión para continuar tu viaje
             </p>
           </div>
         </div>
 
+        {error && (
+          <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+            {error}
+          </div>
+        )}
+
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
-            <div>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-nightBlue/20 focus:border-nightBlue transition-all duration-300"
-                placeholder="Email address"
-              />
-            </div>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Correo electrónico"
+            />
 
-            <div>
-              <input
+            <div className="relative">
+              <Input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-nightBlue/20 focus:border-nightBlue transition-all duration-300"
-                placeholder="Password"
+                placeholder="Contraseña"
+                rightIcon={
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-gray-400 hover:text-gray-600" 
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                }
               />
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
                 id="remember-me"
@@ -78,12 +133,12 @@ export default function LoginView() {
                 className="h-4 w-4 text-nightBlue focus:ring-nightBlue border-gray-300 rounded"
               />
               <label htmlFor="remember-me" className="ml-2 text-gray-600">
-                Remember me
+                Recordarme
               </label>
             </div>
 
             <a href="#" className="text-nightBlue hover:text-nightBlue/80 transition-colors duration-300">
-              Forgot password?
+              ¿Olvidaste tu contraseña?
             </a>
           </div>
 
@@ -95,19 +150,19 @@ export default function LoginView() {
             {isLoading ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mx-auto" />
             ) : (
-              "Sign in"
+              "Iniciar sesión"
             )}
           </button>
         </form>
 
-        <div className="mt-8">
+        <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-200" />
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-2 bg-white text-gray-500">
-                Or continue with
+                O continuar con
               </span>
             </div>
           </div>
@@ -117,7 +172,7 @@ export default function LoginView() {
               type="button"
               className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-200 rounded-2xl bg-white text-gray-700 hover:bg-gray-50 transition-all duration-300"
             >
-              <span className="sr-only">Sign in with Google</span>
+              <span className="sr-only">Iniciar sesión con Google</span>
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
@@ -130,7 +185,7 @@ export default function LoginView() {
               type="button"
               className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-200 rounded-2xl bg-white text-gray-700 hover:bg-gray-50 transition-all duration-300"
             >
-              <span className="sr-only">Sign in with GitHub</span>
+              <span className="sr-only">Iniciar sesión con GitHub</span>
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"

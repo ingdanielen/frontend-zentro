@@ -19,11 +19,15 @@ interface SearchFilters {
   limit?: number;
 }
 
-const ProductsView: React.FC = () => {
+interface ProductByCategoryViewProps {
+  category: string;
+}
+
+const ProductByCategoryView: React.FC<ProductByCategoryViewProps> = ({ category = '' }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<SearchFilters>({
-    category: null,
+    category: category || '',
     brand: null,
     page: 1,
     limit: 9
@@ -76,7 +80,7 @@ const ProductsView: React.FC = () => {
       setTotalItems(response?.data?.total || 0);
       
       // Mantener todos los productos para los filtros
-      if (!params.q && !params.category && !params.brand && !params.minPrice && !params.maxPrice && !params.color) {
+      if (!params.q && !params.brand && !params.minPrice && !params.maxPrice && !params.color) {
         setAllProducts(newProducts);
       }
     } catch (error) {
@@ -90,8 +94,8 @@ const ProductsView: React.FC = () => {
 
   // Cargar productos iniciales
   useEffect(() => {
-    fetchProducts({ category: null, brand: null, page: 1, limit: 9 });
-  }, [fetchProducts]);
+    fetchProducts({ category: category, brand: null, page: 1, limit: 9 });
+  }, [fetchProducts, category]);
 
   const handleFilter = useCallback((newFilters: SearchFilters) => {
     const updatedFilters = { ...filters, ...newFilters, page: 1 }; // Reset to page 1 when filters change
@@ -121,8 +125,6 @@ const ProductsView: React.FC = () => {
   const startProduct = totalItems === 0 ? 0 : ((filters.page || 1) - 1) * (filters.limit || 9) + 1;
   const endProduct = Math.min((filters.page || 1) * (filters.limit || 9), totalItems);
 
-  const categoryLabel = filters.category || 'Catálogo de Productos';
-
   const handlePageChange = (page: number) => {
     const updatedFilters = { ...filters, page };
     setFilters(updatedFilters);
@@ -135,7 +137,11 @@ const ProductsView: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 overflow-x-hidden">
-      <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Catálogo' }]} />
+      <Breadcrumb items={[
+        { label: 'Home', href: '/' }, 
+        { label: 'Catálogo', href: '/catalogo' },
+        { label: category ? category.charAt(0).toUpperCase() + category.slice(1) : 'Categoría' }
+      ]} />
       <div className="flex flex-col md:flex-row gap-8">
         {/* Floating Filter Button */}
         <button 
@@ -167,9 +173,11 @@ const ProductsView: React.FC = () => {
         </div>
 
         {/* Productos */}
-        <div className="flex-1 min-w-0">
+        <div className="flex-1">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
-            <h1 className="text-3xl font-extrabold text-nightBlue">{categoryLabel.charAt(0).toUpperCase() + categoryLabel.slice(1)}</h1>
+            <h1 className="text-3xl font-extrabold text-nightBlue">
+              {category ? category.charAt(0).toUpperCase() + category.slice(1) : 'Categoría'}
+            </h1>
             <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end">
               <span className="text-gray-500 text-base">
                 Mostrando {startProduct}-{endProduct} de {totalItems} Productos
@@ -193,6 +201,7 @@ const ProductsView: React.FC = () => {
               </div>
             </div>
           </div>
+          
           {loading ? (
             <div className="text-center py-20 text-lg text-gray-500">Cargando productos...</div>
           ) : (
@@ -227,4 +236,4 @@ const ProductsView: React.FC = () => {
   );
 };
 
-export default ProductsView;
+export default ProductByCategoryView;
