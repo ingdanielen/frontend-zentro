@@ -13,6 +13,12 @@ Frontend Zentro es una plataforma de comercio electrónico moderna construida co
 - 🔍 Búsqueda avanzada de productos
 - 📦 Gestión de categorías
 
+## Diseño Figma:
+- https://www.figma.com/design/8zXJboifPW2UAt8zazY5cd/Zentro.co?node-id=0-1&m=dev
+
+## Despliegue en Vercel:
+- https://zentro-woad.vercel.app/
+
 ## Tecnologías Utilizadas
 - Next.js 14
 - TypeScript
@@ -43,7 +49,7 @@ src/
 ## Instalación
 1. Clonar el repositorio:
 ```bash
-git clone [URL_DEL_REPOSITORIO]
+git clone https://github.com/ingdanielen/frontend-zentro.git
 ```
 
 2. Instalar dependencias:
