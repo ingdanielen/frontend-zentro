@@ -203,7 +203,12 @@ const ProductByCategoryView: React.FC<ProductByCategoryViewProps> = ({ category 
           </div>
           
           {loading ? (
-            <div className="text-center py-20 text-lg text-gray-500">Cargando productos...</div>
+            <div className="text-center py-20">
+              <div className="inline-block animate-fade-in">
+                <div className="w-16 h-16 border-4 border-nightBlue border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <p className="mt-4 text-lg text-gray-500 animate-fade-in">Cargando productos...</p>
+              </div>
+            </div>
           ) : (
             <div>
               {sortedProducts.length > 0 ? (

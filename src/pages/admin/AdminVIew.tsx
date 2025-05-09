@@ -1,3 +1,15 @@
+/**
+ * AdminView Component
+ * 
+ * This component serves as the main administrative dashboard for managing products, orders, and users.
+ * It includes features for:
+ * - Product management (CRUD operations)
+ * - Order management (placeholder for future implementation)
+ * - User management (placeholder for future implementation)
+ * - Role-based access control
+ * - Pagination for product listing
+ */
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -9,26 +21,38 @@ import AdminProductList from './AdminProductList';
 import { useAppSelector } from '@/store/hooks';
 import { useRouter } from 'next/navigation';
 
+// Define the available tabs in the admin dashboard
 type TabType = 'products' | 'orders' | 'users';
 
 export default function AdminView() {
+  // State management for products and UI
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('products');
+  
+  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
+
+  // Authentication state from Redux store
   const { token, user, isAuthenticated } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
+  // Authentication check - redirect to login if not authenticated or not admin
   useEffect(() => {
     if (!isAuthenticated || user?.role !== 'admin') {
       router.push('/login');
     }
   }, [isAuthenticated, user, router]);
 
+  /**
+   * Fetches products from the API with pagination support
+   * @param page - Current page number
+   * @param limit - Number of items per page
+   */
   const fetchProducts = async (page: number = currentPage, limit: number = itemsPerPage) => {
     try {
       setLoading(true);
@@ -44,12 +68,14 @@ export default function AdminView() {
     }
   };
 
+  // Fetch products when the products tab is active
   useEffect(() => {
     if (activeTab === 'products') {
       fetchProducts();
     }
   }, [activeTab]);
 
+  // Handlers for pagination, product editing, and form management
   const handlePageChange = (page: number, limit: number) => {
     setCurrentPage(page);
     setItemsPerPage(limit);
@@ -76,6 +102,13 @@ export default function AdminView() {
     handleFormClose();
   };
 
+  /**
+   * Renders the content based on the active tab
+   * Currently implements:
+   * - Products tab: Full CRUD functionality
+   * - Orders tab: Placeholder for future implementation
+   * - Users tab: Placeholder for future implementation
+   */
   const renderTabContent = () => {
     switch (activeTab) {
       case 'products':
@@ -127,9 +160,11 @@ export default function AdminView() {
     }
   };
 
+  // Main component render
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header section with title and description */}
         <div className="bg-white rounded-2xl shadow-sm p-6 mb-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
             <div>
@@ -138,6 +173,7 @@ export default function AdminView() {
             </div>
           </div>
 
+          {/* Navigation tabs */}
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex flex-wrap gap-2 sm:gap-8">
               <button
@@ -177,11 +213,13 @@ export default function AdminView() {
           </div>
         </div>
 
+        {/* Main content area */}
         <div className="bg-white rounded-2xl shadow-sm p-6">
           {renderTabContent()}
         </div>
       </div>
 
+      {/* Modal for product form */}
       {showForm && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full mx-4">

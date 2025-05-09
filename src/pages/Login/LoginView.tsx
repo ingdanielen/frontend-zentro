@@ -9,7 +9,15 @@ import { setCredentials } from '@/store/features/authSlice';
 import Input from '@/components/UX-UI/Input';
 import { Eye, EyeOff } from 'lucide-react';
 
+/**
+ * Componente LoginView
+ * 
+ * Este componente maneja la vista de inicio de sesión de la aplicación.
+ * Permite a los usuarios iniciar sesión con email y contraseña, y también
+ * ofrece opciones para iniciar sesión con Google y GitHub.
+ */
 export default function LoginView() {
+  // Estados para manejar el formulario y la UI
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -18,6 +26,12 @@ export default function LoginView() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
+  /**
+   * Efecto que verifica si el usuario ya está autenticado
+   * Si existe un token en localStorage, redirige al usuario según su rol:
+   * - Admin -> /admin
+   * - Usuario normal -> /carrito
+   */
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -40,6 +54,10 @@ export default function LoginView() {
     }
   }, [router]);
 
+  /**
+   * Maneja el envío del formulario de inicio de sesión
+   * @param e - Evento del formulario
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -50,8 +68,10 @@ export default function LoginView() {
       const response = await loginService.login(credentials);
       
       if (response.success) {
+        // Guarda el token y las credenciales del usuario
         localStorage.setItem('token', response.data.token);
         dispatch(setCredentials(response.data));
+        // Redirige según el rol del usuario
         if (response.data.user.role === 'admin') {
           router.push("/admin");
         } else {
@@ -70,7 +90,9 @@ export default function LoginView() {
 
   return (
     <div className="py-5 flex items-center justify-center">
+      {/* Contenedor principal del formulario */}
       <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-md">
+        {/* Encabezado */}
         <div className="text-center">
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-nightBlue mb-2">
@@ -82,14 +104,17 @@ export default function LoginView() {
           </div>
         </div>
 
+        {/* Mensaje de error */}
         {error && (
           <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
             {error}
           </div>
         )}
 
+        {/* Formulario de inicio de sesión */}
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
+            {/* Campo de email */}
             <Input
               id="email"
               name="email"
@@ -101,6 +126,7 @@ export default function LoginView() {
               placeholder="Correo electrónico"
             />
 
+            {/* Campo de contraseña con botón para mostrar/ocultar */}
             <div className="relative">
               <Input
                 id="password"
@@ -124,6 +150,7 @@ export default function LoginView() {
             </div>
           </div>
 
+          {/* Opciones adicionales */}
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
@@ -142,6 +169,7 @@ export default function LoginView() {
             </a>
           </div>
 
+          {/* Botón de inicio de sesión */}
           <button
             type="submit"
             disabled={isLoading}
@@ -155,6 +183,7 @@ export default function LoginView() {
           </button>
         </form>
 
+        {/* Sección de inicio de sesión con redes sociales */}
         <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -167,7 +196,9 @@ export default function LoginView() {
             </div>
           </div>
 
+          {/* Botones de inicio de sesión social */}
           <div className="mt-6 grid grid-cols-2 gap-3">
+            {/* Botón de Google */}
             <button
               type="button"
               className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-200 rounded-2xl bg-white text-gray-700 hover:bg-gray-50 transition-all duration-300"
@@ -181,6 +212,7 @@ export default function LoginView() {
               </svg>
             </button>
 
+            {/* Botón de GitHub */}
             <button
               type="button"
               className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-200 rounded-2xl bg-white text-gray-700 hover:bg-gray-50 transition-all duration-300"

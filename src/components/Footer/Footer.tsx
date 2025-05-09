@@ -1,3 +1,19 @@
+/**
+ * Footer Component
+ * 
+ * Este es el componente de pie de página principal de la aplicación que incluye:
+ * - Banner superior con formulario de suscripción
+ * - Logo y descripción de la empresa
+ * - Enlaces a redes sociales
+ * - Secciones de navegación (ZENTRO, HELP, FAQ, RESOURCES)
+ * - Información de copyright y métodos de pago
+ * 
+ * El componente no se muestra en la ruta "/admin" para mantener una interfaz limpia
+ * en el panel de administración.
+ * 
+ * @returns {JSX.Element | null} Componente de pie de página o null si está en la ruta de admin
+ */
+
 "use client";
 
 import { Facebook, Github, Instagram, Twitter } from "lucide-react";

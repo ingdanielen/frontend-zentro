@@ -2,9 +2,17 @@ import  http  from '../baseRequest';
 import { Product, SearchParams } from '../../types/productType';
 import { ApiResponse, SearchParameters, ProductApiResponse, SingleProductResponse } from '../../types/apiResponse';      
 
-// Product Service
+/**
+ * Servicio de Productos
+ * Este servicio maneja todas las operaciones relacionadas con productos
+ * incluyendo búsqueda, creación, actualización y obtención de parámetros
+ */
 export const productService = {
-  // Search products with filters
+  /**
+   * Busca productos con filtros
+   * @param params - Parámetros de búsqueda (página, límite, categoría, marca, etc.)
+   * @returns Promise con la respuesta de la API conteniendo los productos
+   */
   async searchProducts(params: SearchParams = {}): Promise<ProductApiResponse<Product>> {
     try {
       // Build query string from params
@@ -29,7 +37,11 @@ export const productService = {
     }
   },
 
-  // Get product by ID
+  /**
+   * Obtiene un producto específico por su ID
+   * @param id - ID del producto a buscar
+   * @returns Promise con la información del producto
+   */
   async getProductById(id: string): Promise<SingleProductResponse> {
     try {
       const response = await http.get(`/items/${id}`);
@@ -40,7 +52,12 @@ export const productService = {
     }
   },
 
-  // Create new product
+  /**
+   * Crea un nuevo producto en el sistema
+   * @param product - Datos del producto a crear (sin ID ni campos generados)
+   * @param token - Token de autenticación
+   * @returns Promise con el producto creado
+   */
   async createProduct(product: Omit<Product, '_id' | 'rating' | 'createdAt' | '__v'>, token: string): Promise<Product> {
     try {
       const response = await http.post(`/items`, product, {
@@ -55,7 +72,13 @@ export const productService = {
     }
   },
 
-  // Update existing product
+  /**
+   * Actualiza un producto existente
+   * @param id - ID del producto a actualizar
+   * @param product - Datos actualizados del producto
+   * @param token - Token de autenticación
+   * @returns Promise con el producto actualizado
+   */
   async updateProduct(id: string, product: Partial<Product>, token: string): Promise<Product> {
     try {
       const response = await http.put(`/items/${id}`, product, {
@@ -70,7 +93,11 @@ export const productService = {
     }
   },
 
-  // Get search parameters (categories and brands)
+  /**
+   * Obtiene los parámetros de búsqueda disponibles
+   * (categorías y marcas)
+   * @returns Promise con los parámetros de búsqueda
+   */
   async getSearchParameters(): Promise<SearchParameters> {
     try {
       const response = await http.get(`/search`);
@@ -81,7 +108,10 @@ export const productService = {
     }
   },
 
-  // Get all system parameters
+  /**
+   * Obtiene todos los parámetros del sistema
+   * @returns Promise con todos los parámetros del sistema
+   */
   async getAllParameters(): Promise<ApiResponse<Record<string, unknown>>> {
     try {
       const response = await http.get(`/parameters`);
@@ -92,7 +122,11 @@ export const productService = {
     }
   },
 
-  // Update parameter count
+  /**
+   * Actualiza el contador de parámetros
+   * @param updateData - Datos para actualizar el contador
+   * @returns Promise con la respuesta de la actualización
+   */
   async updateParameterCount(updateData: Record<string, unknown>): Promise<ApiResponse<Record<string, unknown>>> {
     try {
       const response = await http.post(`/parameters/update`, updateData);

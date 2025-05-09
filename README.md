@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend Zentro - E-commerce Platform
 
-## Getting Started
+## Descripción
+Frontend Zentro es una plataforma de comercio electrónico moderna construida con Next.js, TypeScript y Tailwind CSS. La aplicación ofrece una experiencia de compra intuitiva y atractiva con funcionalidades completas de e-commerce.
 
-First, run the development server:
+## Características Principales
+- 🛍️ Catálogo de productos con filtrado y búsqueda
+- 🛒 Sistema de carrito de compras
+- 👤 Autenticación de usuarios
+- 📱 Diseño responsive
+- 🎯 Sección de ofertas y novedades
+- 👨‍💼 Panel de administración
+- 🔍 Búsqueda avanzada de productos
+- 📦 Gestión de categorías
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Tecnologías Utilizadas
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- React Context API
+- Custom Hooks
+- ESLint
+- PostCSS
+
+## Estructura del Proyecto
+```
+src/
+├── app/              # Rutas y páginas principales
+├── components/       # Componentes reutilizables
+├── context/         # Contextos de React
+├── hooks/           # Custom hooks
+├── lib/             # Utilidades y configuraciones
+├── services/        # Servicios y llamadas API
+├── store/           # Estado global
+├── styles/          # Estilos globales
+└── types/           # Definiciones de TypeScript
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Requisitos Previos
+- Node.js 18.x o superior
+- npm o yarn
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Instalación
+1. Clonar el repositorio:
+```bash
+git clone [URL_DEL_REPOSITORIO]
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Instalar dependencias:
+```bash
+npm install
+# o
+yarn install
+```
 
-## Learn More
+3. Iniciar el servidor de desarrollo:
+```bash
+npm run dev
+# o
+yarn dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Despliegue
+El proyecto está configurado para ser desplegado en Vercel. Para desplegar:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Crear una cuenta en Vercel
+2. Conectar el repositorio de GitHub
+3. Configurar las variables de entorno necesarias
+4. Desplegar
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Variables de Entorno
+Crear un archivo `.env.local` con las siguientes variables:
+```
+NEXT_PUBLIC_API_URL=tu_url_api
+```
 
-## Deploy on Vercel
+## Scripts Disponibles
+- `npm run dev` - Inicia el servidor de desarrollo
+- `npm run build` - Construye la aplicación para producción
+- `npm run start` - Inicia la aplicación en modo producción
+- `npm run lint` - Ejecuta el linter
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contribución
+1. Fork el proyecto
+2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abrir un Pull Request
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Licencia
+Este proyecto está bajo la Licencia MIT.
+
+## Contacto
+[Tu Nombre] - [Tu Email]
+
+## Agradecimientos
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Vercel](https://vercel.com/)

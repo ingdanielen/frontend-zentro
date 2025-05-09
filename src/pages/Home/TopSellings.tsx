@@ -9,7 +9,7 @@ import LoadingFade from '@/components/UX-UI/LoadingFade';
 const TopSellings: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const itemsPerPage = 10;
+  const itemsPerPage = 4;
 
   const fetchProducts = useCallback(async () => {
     try {
@@ -21,7 +21,8 @@ const TopSellings: React.FC = () => {
       if (response?.data?.items) {
         // Ordenar productos por rating de mayor a menor
         const sortedProducts = [...response.data.items].sort((a, b) => b.rating - a.rating);
-        setProducts(sortedProducts);
+        // Tomar solo los primeros 4 productos después de ordenar
+        setProducts(sortedProducts.slice(0, itemsPerPage));
       } else {
         console.error("Invalid response format:", response);
         setProducts([]);

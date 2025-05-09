@@ -61,7 +61,7 @@ export default function Highlighted() {
             </span>
           </Link>
           {/* Fila 2 */}
-          <Link href={`/categoria/${dressStyles[2].alt.toLowerCase()}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow  transition-all cursor-pointer">
+          <Link href={`/categoria/${dressStyles[2].alt}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow  transition-all cursor-pointer">
             <Image
               src={dressStyles[2].img}
               alt={dressStyles[2].alt}

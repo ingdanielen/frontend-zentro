@@ -1,3 +1,16 @@
+/**
+ * Header Component
+ * 
+ * Este es el componente de encabezado principal de la aplicación que incluye:
+ * - Banner superior con información de la aplicación
+ * - Logo de la empresa
+ * - Navegación principal con menú desplegable de categorías
+ * - Barra de búsqueda
+ * - Carrito de compras
+ * - Menú de usuario con opciones de autenticación
+ * - Versión móvil con menú lateral
+ */
+
 "use client";
 import { useCart } from "@/hooks/useCart";
 import { productService } from '@/services/products/productService';
@@ -11,6 +24,10 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import InputQuery from '../common/InputQuery';
 
+/**
+ * Enlaces de navegación principales
+ * @type {Array<{label: string, href?: string, dropdown?: boolean, adminOnly?: boolean}>}
+ */
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Categorías", dropdown: true },
@@ -19,18 +36,31 @@ const navLinks = [
   { label: "Novedades", href: "/novedades" },
 ];
 
+/**
+ * Header Component
+ * 
+ * Componente de encabezado que maneja la navegación principal, autenticación
+ * y funcionalidades del carrito de compras.
+ * 
+ * @returns {JSX.Element} Componente de encabezado
+ */
 export const Header: React.FC = () => {
+  // Estados locales
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [categories, setCategories] = useState<SearchParams['categories']>([]);
+  const [showMobileCategories, setShowMobileCategories] = useState(false);
+
+  // Hooks y utilidades
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const { cart } = useCart();
-  const [showMobileCategories, setShowMobileCategories] = useState(false);
 
-  // Fetch categories when component mounts
+  /**
+   * Efecto para cargar las categorías al montar el componente
+   */
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -46,7 +76,9 @@ export const Header: React.FC = () => {
     fetchCategories();
   }, []);
 
-  // Close user menu when clicking outside
+  /**
+   * Efecto para cerrar el menú de usuario al hacer clic fuera
+   */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -59,6 +91,9 @@ export const Header: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  /**
+   * Maneja el cierre de sesión del usuario
+   */
   const handleLogout = () => {
     dispatch(logout());
     localStorage.removeItem('token');
