@@ -5,10 +5,12 @@ import { logout } from '@/store/features/authSlice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { ApiResponse } from '@/types/apiResponse';
 import { SearchParams } from '@/types/parameters';
-import { ChevronDown, LogOut, Menu, Search, ShoppingCart, User, UserCircle, X } from "lucide-react";
+import { ChevronDown, LogOut, Menu, ShoppingCart, User, UserCircle, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import InputQuery from '../common/InputQuery';
+
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Categorías", dropdown: true },
@@ -26,6 +28,7 @@ export const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const { user, isAuthenticated } = useAppSelector((state) => state.auth);
   const { cart } = useCart();
+  const [showMobileCategories, setShowMobileCategories] = useState(false);
 
   // Fetch categories when component mounts
   useEffect(() => {
@@ -123,11 +126,11 @@ export const Header: React.FC = () => {
                     {link.dropdown && <ChevronDown className="ml-1" size={16} />}
                   </button>
                 )}
-                {/* Dropdown example (not functional) */}
+                {/* Dropdown example (now flex-wrap) */}
                 {link.dropdown && (
                   <div className="fixed left-0 right-0 mt-4 bg-white border-t border-gray-100 shadow-lg z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-out">
                     <div className="max-w-7xl mx-auto px-4 py-4">
-                      <div className="grid grid-cols-4 gap-8">
+                      <div className="flex flex-wrap gap-4">
                         {categories.map((category) => (
                           <Link 
                             key={category.name} 
@@ -152,14 +155,7 @@ export const Header: React.FC = () => {
 
         {/* Search Bar (desktop only) */}
         <div className="flex-1 mx-6 max-w-xl hidden md:flex">
-          <div className="flex items-center w-full bg-gray-100 rounded-full px-4 py-2">
-            <Search className="text-gray-400 mr-2" size={20} />
-            <input
-              type="text"
-              placeholder="Buscar productos..."
-              className="bg-transparent outline-none text-gray-800 w-full text-base"
-            />
-          </div>
+          <InputQuery limit={8} />
         </div>
 
         {/* Icons (right for mobile and desktop) */}
@@ -235,28 +231,53 @@ export const Header: React.FC = () => {
               <X size={24} />
             </button>
           </div>
-          {navLinks.map((link) => (
-            (!link.adminOnly || (link.adminOnly && user?.role === 'admin')) && (
+          {navLinks.map((link) => {
+            if (link.adminOnly && user?.role !== 'admin') return null;
+            if (link.dropdown) {
+              return (
+                <div key={link.label}>
+                  <button
+                    className={`w-full text-left text-base font-medium py-1 flex items-center gap-2 hover:text-nightBlue transition-all duration-200 relative ${
+                      showMobileCategories ? 'text-nightBlue font-medium border-l-4 border-nightBlue bg-gray-50 pl-3' : 'text-black border-l-4 border-transparent pl-3'
+                    }`}
+                    onClick={() => setShowMobileCategories(!showMobileCategories)}
+                  >
+                    {link.label}
+                    <ChevronDown className={`ml-1 transition-transform duration-200 ${showMobileCategories ? 'rotate-180' : ''}`} size={16} />
+                  </button>
+                  <div
+                    className={`pl-6 flex flex-col gap-1 mt-1 overflow-hidden transition-all duration-300 ease-in-out ${showMobileCategories ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+                    style={{ transitionProperty: 'max-height, opacity' }}
+                  >
+                    {categories.map((category) => (
+                      <Link
+                        key={category.name}
+                        href={`/categoria/${encodeURIComponent(category.name)}`}
+                        className="text-gray-700 hover:text-nightBlue py-1"
+                      >
+                        {category.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+            return (
               <Link
                 key={link.label}
                 href={link.href || "#"}
-                className={`text-left text-base font-medium py-1 border-b border-gray-100 flex items-center gap-2 hover:text-nightBlue transition-all duration-200 relative ${
+                className={`text-left text-base font-medium py-1 flex items-center gap-2 hover:text-nightBlue transition-all duration-200 ${
                   pathname === link.href
-                    ? "text-nightBlue font-medium after:absolute after:left-0 after:bottom-0 after:w-1 after:h-full after:bg-nightBlue"
-                    : "text-black hover:after:absolute hover:after:left-0 hover:after:bottom-0 hover:after:w-1 hover:after:h-full hover:after:bg-nightBlue/50"
+                    ? "text-nightBlue font-medium border-l-4 border-nightBlue bg-gray-50 pl-3"
+                    : "text-black border-l-4 border-transparent pl-3"
                 }`}
               >
                 {link.label}
               </Link>
-            )
-          ))}
+            );
+          })}
           <div className="flex items-center w-full bg-gray-100 rounded-full px-4 py-2 mt-4">
-            <Search className="text-gray-400 mr-2" size={20} />
-            <input
-              type="text"
-              placeholder="Buscar productos..."
-              className="bg-transparent outline-none w-full text-base "
-            />
+            <InputQuery limit={8} />
           </div>
           <div className="flex items-center gap-4 mt-6">
             <Link href="/cart">

@@ -17,6 +17,9 @@ export default function AdminView() {
   const [showForm, setShowForm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('products');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
   const { token, user, isAuthenticated } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
@@ -26,11 +29,14 @@ export default function AdminView() {
     }
   }, [isAuthenticated, user, router]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (page: number = currentPage, limit: number = itemsPerPage) => {
     try {
       setLoading(true);
-      const response = await productService.searchProducts();
-      setProducts(response.data.items);
+      const response = await productService.searchProducts({ page, limit });
+      if (response.success && response.data) {
+        setProducts(response.data.items);
+        setTotalItems(response.data.total);
+      }
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -43,6 +49,12 @@ export default function AdminView() {
       fetchProducts();
     }
   }, [activeTab]);
+
+  const handlePageChange = (page: number, limit: number) => {
+    setCurrentPage(page);
+    setItemsPerPage(limit);
+    fetchProducts(page, limit);
+  };
 
   const handleEdit = (product: Product) => {
     setSelectedProduct(product);
@@ -84,7 +96,9 @@ export default function AdminView() {
               products={products}
               loading={loading}
               onEdit={handleEdit}
-              onRefresh={fetchProducts}
+              onRefresh={() => fetchProducts()}
+              totalItems={totalItems}
+              onPageChange={handlePageChange}
             />
           </>
         );

@@ -19,23 +19,23 @@ const ShopcartView: React.FC = () => {
     // Simulate loading state
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 500);
+    }, 100);
     return () => clearTimeout(timer);
   }, [isAuthenticated]);
 
   if (!isAuthenticated) {
     return (
       <LoadingFade isLoading={isLoading}>
-        <div className="min-h-screen bg-gradient-to-br from-zentro-dark to-zentro-darker py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
+        <div className="py-20 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl bg-gray-100 mx-auto rounded-2xl p-8 shadow-md">
             <div className="text-center">
-              <h1 className="text-4xl font-bold text-white mb-8">
+              <h1 className="text-4xl  font-bold text-nightBlue mb-8">
                 Inicia sesión para continuar
               </h1>
-              <div className="space-y-4">
+              <div className="flex md:flex-row flex-col items-center justify-center gap-4">
                 <button
                   onClick={() => router.push('/login')}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-zentro-primary text-white rounded-lg hover:bg-zentro-primary/90 transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-nightBlue text-white rounded-2xl hover:bg-nightBlue/90 transition-colors font-semibold"
                 >
                   <LogIn className="w-5 h-5" />
                   Iniciar Sesión
@@ -43,7 +43,7 @@ const ShopcartView: React.FC = () => {
                 <div>
                   <button
                     onClick={() => router.push('/register')}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-zentro-card/20 text-white rounded-lg hover:bg-zentro-card/30 transition-colors"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gray-200 text-nightBlue rounded-2xl hover:bg-gray-200 transition-colors font-semibold"
                   >
                     <UserPlus className="w-5 h-5" />
                     Crear Cuenta
@@ -51,9 +51,9 @@ const ShopcartView: React.FC = () => {
                 </div>
               </div>
               <div className="mt-8 text-center">
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-gray-500">
                   ¿Necesitas ayuda?{' '}
-                  <a href="/novedades" className="text-zentro-primary hover:text-zentro-primary/80 transition-colors inline-flex items-center gap-1">
+                  <a href="/novedades" className="text-nightBlue hover:text-nightBlue/80 transition-colors inline-flex items-center gap-1">
                     <HelpCircle className="w-4 h-4" />
                     Contáctanos
                   </a>
@@ -69,10 +69,10 @@ const ShopcartView: React.FC = () => {
   if (!isInitialized) {
     return (
       <LoadingFade isLoading={true}>
-        <div className="min-h-screen bg-gradient-to-br from-zentro-dark to-zentro-darker py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gradient-to-br from-white to-lightGray/30 py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="text-center">
-              <h1 className="text-4xl font-bold text-white mb-8">
+              <h1 className="text-4xl font-integral font-bold text-nightBlue mb-8">
                 Cargando carrito...
               </h1>
             </div>
@@ -84,15 +84,15 @@ const ShopcartView: React.FC = () => {
 
   return (
     <LoadingFade isLoading={isLoading}>
-      <div className="min-h-screen bg-gradient-to-br from-zentro-dark to-zentro-darker py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-white to-lightGray/30 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl font-bold text-white mb-8 text-center">
+          <h1 className="text-4xl font-integral font-bold text-nightBlue mb-8 text-center">
             Tu Carrito de Compras
           </h1>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <div className="bg-zentro-card/10 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-zentro-border">
+              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                 <div className="space-y-6">
                   {cart.items.length === 0 ? (
                     <ShopcartEmpty />

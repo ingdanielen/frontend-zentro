@@ -6,12 +6,12 @@ const dressStyles = [
   {
     label: "Tecnología",
     img: "/images/technology-banner.jpg",
-    alt: "Ropa tecnología",
+    alt: "Electronicos",
   },
   {
     label: "Moda",
     img: "/images/moda.jpg",
-    alt: "Ropa formal",
+    alt: "Moda",
   },
   {
     label: "Hogar",
@@ -21,7 +21,7 @@ const dressStyles = [
   {
     label: "Deportes",
     img: "/images/baner-deportes.jpg",
-    alt: "Ropa de fiesta",
+    alt: "Deportes",
   },
 
 ];
@@ -36,7 +36,7 @@ export default function Highlighted() {
         {/* Desktop grid */}
         <div className="hidden md:grid grid-cols-3 grid-rows-2 gap-6">
           {/* Fila 1 */}
-          <Link href={`/products/${dressStyles[0].label.toLowerCase()}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow  transition-all cursor-pointer col-span-2">
+          <Link href={`/categoria/${dressStyles[0].alt}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow  transition-all cursor-pointer col-span-2">
             <Image
               src={dressStyles[0].img}
               alt={dressStyles[0].alt}
@@ -48,7 +48,7 @@ export default function Highlighted() {
               {dressStyles[0].label}
             </span>
           </Link>
-          <Link href={`/products/${dressStyles[1].label.toLowerCase()}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow  transition-all cursor-pointer">
+          <Link href={`/categoria/${dressStyles[1].alt}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow  transition-all cursor-pointer">
             <Image
               src={dressStyles[1].img}
               alt={dressStyles[1].alt}
@@ -61,7 +61,7 @@ export default function Highlighted() {
             </span>
           </Link>
           {/* Fila 2 */}
-          <Link href={`/products/${dressStyles[2].label.toLowerCase()}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow  transition-all cursor-pointer">
+          <Link href={`/categoria/${dressStyles[2].alt.toLowerCase()}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow  transition-all cursor-pointer">
             <Image
               src={dressStyles[2].img}
               alt={dressStyles[2].alt}
@@ -73,7 +73,7 @@ export default function Highlighted() {
               {dressStyles[2].label}
             </span>
           </Link>
-          <Link href={`/products/${dressStyles[3].label.toLowerCase()}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow  transition-all cursor-pointer col-span-2">
+          <Link href={`/categoria/${dressStyles[3].alt}`} className="relative rounded-2xl overflow-hidden bg-white min-h-[220px] group shadow  transition-all cursor-pointer col-span-2">
             <Image
               src={dressStyles[3].img}
               alt={dressStyles[3].alt}
@@ -91,7 +91,7 @@ export default function Highlighted() {
           {dressStyles.map((style) => (
             <Link
               key={style.label}
-              href={`/products/${style.label.toLowerCase()}`}
+              href={`/categoria/${style.alt}`}
               className="relative rounded-2xl overflow-hidden bg-white min-h-[120px] shadow group  transition-all cursor-pointer"
             >
               <Image

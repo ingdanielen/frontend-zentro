@@ -13,6 +13,9 @@ export const productService = {
       if (params.page) queryParams.append('page', params.page.toString());
       if (params.limit) queryParams.append('limit', params.limit.toString());
       
+      // Add search query
+      if (params.q) queryParams.append('q', params.q);
+      
       // Add additional search params
       if (params.category) queryParams.append('category', params.category);
       if (params.brand) queryParams.append('brand', params.brand);

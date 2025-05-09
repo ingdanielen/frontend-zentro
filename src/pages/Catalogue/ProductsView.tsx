@@ -20,6 +20,27 @@ interface SearchFilters {
 }
 
 const ProductsView: React.FC = () => {
+  // Agregar el estilo de la animación
+  React.useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<SearchFilters>({
@@ -42,7 +63,10 @@ const ProductsView: React.FC = () => {
   const fetchProducts = useCallback(async (customFilters: SearchFilters) => {
     setLoading(true);
     try {
-      const params: Record<string, string | number> = {};
+      const params: Record<string, string | number> = {
+        page: customFilters.page || 1,
+        limit: customFilters.limit || 9
+      };
       
       if (customFilters.q && customFilters.q.trim() !== '') {
         params.q = customFilters.q;
@@ -61,12 +85,6 @@ const ProductsView: React.FC = () => {
       }
       if (customFilters.color) {
         params.color = customFilters.color;
-      }
-      if (customFilters.page) {
-        params.page = customFilters.page;
-      }
-      if (customFilters.limit) {
-        params.limit = customFilters.limit;
       }
 
       console.log('Fetching products with params:', params);
@@ -90,11 +108,17 @@ const ProductsView: React.FC = () => {
 
   // Cargar productos iniciales
   useEffect(() => {
-    fetchProducts({ category: null, brand: null, page: 1, limit: 9 });
-  }, [fetchProducts]);
+    if (filters.page === 1 && !filters.category && !filters.brand) {
+      fetchProducts(filters);
+    }
+  }, [fetchProducts, filters]);
 
   const handleFilter = useCallback((newFilters: SearchFilters) => {
-    const updatedFilters = { ...filters, ...newFilters, page: 1 }; // Reset to page 1 when filters change
+    const updatedFilters = { 
+      ...filters, 
+      ...newFilters,
+      page: newFilters.page || 1 // Solo resetear a página 1 si es un nuevo filtro
+    };
     setFilters(updatedFilters);
     fetchProducts(updatedFilters);
     // Cerrar el filtro después de aplicar los filtros en móvil
@@ -127,6 +151,8 @@ const ProductsView: React.FC = () => {
     const updatedFilters = { ...filters, page };
     setFilters(updatedFilters);
     fetchProducts(updatedFilters);
+    // Scroll to top when changing pages
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleCloseFilter = useCallback(() => {
@@ -200,8 +226,20 @@ const ProductsView: React.FC = () => {
               {sortedProducts.length > 0 ? (
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {sortedProducts.map((product) => (
-                      <ProductCard key={product._id} product={product} />
+                    {sortedProducts.map((product, index) => (
+                      <div 
+                        key={product._id} 
+                        style={{ 
+                          opacity: 0,
+                          animationName: 'fadeIn',
+                          animationDuration: '0.5s',
+                          animationTimingFunction: 'ease-in',
+                          animationFillMode: 'forwards',
+                          animationDelay: `${index * 100}ms`
+                        }}
+                      >
+                        <ProductCard product={product} />
+                      </div>
                     ))}
                   </div>
                   {/* Pagination Controls */}

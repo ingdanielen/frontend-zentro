@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Product } from '@/types/productType';
-import { productService } from '@/services/products/productService';
-import { X } from 'lucide-react';
 import Input from '@/components/UX-UI/Input';
+import { productService } from '@/services/products/productService';
+import { Product } from '@/types/productType';
+import { X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface AdminProductFormProps {
   product: Product | null;
@@ -25,6 +25,7 @@ interface FormErrors {
   height?: string;
   weight?: string;
   images?: string;
+  rating?: string;
 }
 
 const AdminProductForm: React.FC<AdminProductFormProps> = ({
@@ -46,6 +47,7 @@ const AdminProductForm: React.FC<AdminProductFormProps> = ({
     weight: 0,
     images: '',
     active: true,
+    rating: 0,
   });
 
   const [loading, setLoading] = useState(false);
@@ -101,6 +103,10 @@ const AdminProductForm: React.FC<AdminProductFormProps> = ({
       newErrors.weight = 'El peso debe ser mayor a 0';
     }
 
+    if (formData.rating === undefined || formData.rating < 0 || formData.rating > 5) {
+      newErrors.rating = 'La calificación debe estar entre 0 y 5';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -108,11 +114,36 @@ const AdminProductForm: React.FC<AdminProductFormProps> = ({
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    const { name, value, type } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'number' ? Number(value) : value,
-    }));
+    const { name, value } = e.target;
+    
+    // Validación para campos numéricos
+    if (['price', 'stock', 'width', 'height', 'weight', 'rating'].includes(name)) {
+      // Permite números, un punto decimal, y el punto al final mientras se escribe
+      if (!/^-?\d*\.?\d*$/.test(value) && value !== '.') {
+        return;
+      }
+      
+      // Si el valor es solo un punto, lo dejamos como está
+      if (value === '.') {
+        setFormData((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+        return;
+      }
+
+      // Convertimos a número solo si no termina en punto
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value.endsWith('.') ? value : (value === '' ? '' : Number(value)),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+    
     // Clear error when user starts typing
     if (errors[name as keyof FormErrors]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
@@ -150,8 +181,9 @@ const AdminProductForm: React.FC<AdminProductFormProps> = ({
           height: formData.height || 0,
           weight: formData.weight || 0,
           images: formData.images || '',
-          active: formData.active ?? true
-        } as Omit<Product, '_id' | 'rating' | 'createdAt' | '__v'>;
+          active: formData.active ?? true,
+          rating: formData.rating || 0
+        } as Omit<Product, '_id' | 'createdAt' | '__v'>;
         await productService.createProduct(newProduct, token);
       }
       onSubmit();
@@ -199,24 +231,25 @@ const AdminProductForm: React.FC<AdminProductFormProps> = ({
               <Input
                 label="Precio"
                 name="price"
-                type="number"
+                type="text"
                 value={formData.price}
                 onChange={handleChange}
                 error={errors.price}
                 required
-                min="0"
-                step="0.01"
+                pattern="^\d*\.?\d*$"
+                inputMode="decimal"
               />
 
               <Input
                 label="Stock"
                 name="stock"
-                type="number"
+                type="text"
                 value={formData.stock}
                 onChange={handleChange}
                 error={errors.stock}
                 required
-                min="0"
+                pattern="^\d*\.?\d*$"
+                inputMode="decimal"
               />
 
               <Input
@@ -249,37 +282,48 @@ const AdminProductForm: React.FC<AdminProductFormProps> = ({
               <Input
                 label="Ancho (cm)"
                 name="width"
-                type="number"
+                type="text"
                 value={formData.width}
                 onChange={handleChange}
                 error={errors.width}
                 required
-                min="0"
-                step="0.1"
+                pattern="^\d*\.?\d*$"
+                inputMode="decimal"
               />
 
               <Input
                 label="Alto (cm)"
                 name="height"
-                type="number"
+                type="text"
                 value={formData.height}
                 onChange={handleChange}
                 error={errors.height}
                 required
-                min="0"
-                step="0.1"
+                pattern="^\d*\.?\d*$"
+                inputMode="decimal"
               />
 
               <Input
                 label="Peso (kg)"
                 name="weight"
-                type="number"
+                type="text"
                 value={formData.weight}
                 onChange={handleChange}
                 error={errors.weight}
                 required
-                min="0"
-                step="0.1"
+                pattern="^\d*\.?\d*$"
+                inputMode="decimal"
+              />
+
+              <Input
+                label="Calificación (0-5)"
+                name="rating"
+                type="text"
+                value={formData.rating}
+                onChange={handleChange}
+                error={errors.rating}
+                pattern="^\d*\.?\d*$"
+                inputMode="decimal"
               />
 
               <div className="md:col-span-2">

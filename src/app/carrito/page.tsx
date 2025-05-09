@@ -1,10 +1,10 @@
 'use client';
 
-import ShopcartEmpty from '@/pages/Shopcart/ShopcartEmpty';
+import ShopcartView from '@/pages/Shopcart/ShopcartView';
 
 export default function CarritoPage() {
    return (
-    <ShopcartEmpty />
+    <ShopcartView />
    )
 }
 
